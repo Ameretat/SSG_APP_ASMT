@@ -1,8 +1,10 @@
 package com.example.p90k0a.test01;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -10,6 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int cnt=0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mDbHelper = new DbAdapter (this);
@@ -29,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
        //목표 리사이클러 뷰 받기
         RecyclerView view = findViewById(R.id.main_recyclerview);
+        TextView tview = findViewById(R.id.memo_cnt);
 
         view.setLayoutManager(new LinearLayoutManager(this));
 
@@ -43,8 +50,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         // step3. adapter 에 data를 넣어주고 => adapter.setItems(data)
         // step4. RecyclerView랑 adapter랑 연결. => RecyclerView.setAdapter(adapter)
 
-        recyclerViewAdapter.setItems(getDummyData()); //--step3 (준비한 DB로부터 뷰로 내용 받기)
 
+        recyclerViewAdapter.setItems(getDBData()); //--step3 (준비한 DB로부터 뷰로 내용 받기)
+        cnt = recyclerViewAdapter.getItemCount();
+        tview.setText("현재 총 " + cnt  +"개의 메모가 저장돼 있습니다.");
         recyclerViewAdapter.notifyDataSetChanged();//--데이터 변경 됐을 경우 리사이클러 뷰에 고지
 
         //------------------------------------
@@ -103,10 +112,17 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         startActivityForResult(i, 1);
     }
 
+    private void showMessage(String message){
+        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {//-- 후속 액티비티 결과값 반환
         super.onActivityResult(requestCode, resultCode, data);
+        TextView tview = findViewById(R.id.memo_cnt);
+
         recyclerViewAdapter.setItems(getDBData()); //--step3
+        tview.setText("현재 총 " + recyclerViewAdapter.getItemCount()  +"개의 메모가 저장돼 있습니다.");
         recyclerViewAdapter.notifyDataSetChanged(); //--데이터 변경 됐을 경우 리사이클러 뷰에 고지
     }
 
@@ -120,6 +136,35 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         i.putExtra("DATE",item.date);
 
         startActivityForResult(i, 1);
+    }
+
+    @Override
+    public void onLongClick(final MemoItem item) {
+
+        //Long itemID = item.ID;
+        //showMessage("LongClick Recieved");
+
+
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Alert!")
+                .setMessage("Are you sure to delete?")
+                .setCancelable(true)
+                .setPositiveButton("delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mDbHelper.deleteNote(item.ID);
+                        recyclerViewAdapter.setItems(getDBData());
+                        recyclerViewAdapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+
     }
 
 }

@@ -40,6 +40,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 itemlistener.onClick(currData);
+            }});
+
+        myViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                itemlistener.onLongClick(currData);
+                return true;
             }
         });
     }
@@ -58,13 +65,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.itemlistener = itemlistener;
     }
 
-//    private class RowCell extends RecyclerView.ViewHolder {
-//
-//        public RowCell(View view) {
-//            super(view);
-//        }
-//    }
-
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView text;
@@ -80,5 +80,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     interface ItemClickListner{
         void onClick(MemoItem item);
+        void onLongClick(MemoItem item);
     }
 }

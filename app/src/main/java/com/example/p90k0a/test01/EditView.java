@@ -1,8 +1,12 @@
 package com.example.p90k0a.test01;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +15,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EditView extends Activity {
+public class EditView extends AppCompatActivity {
 
     public static int numTitle = 1;
     public static String curDate = "";
@@ -19,7 +23,7 @@ public class EditView extends Activity {
     private EditText titleText;
     private EditText bodyText;
     private TextView dateText;
-    private Long mRowId;
+    private Long mRowId = null;
 
     private Cursor note;
 
@@ -55,18 +59,65 @@ public class EditView extends Activity {
         dateText.setText(curDate);
 
 
-        Button addBtn = findViewById(R.id.save_Btn);
+        Button addBtn = findViewById(R.id.save_Btn); //--저장 버튼
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String title = titleText.getText().toString();
+                String body = bodyText.getText().toString();
+                String date = dateText.getText().toString();
 
-
-                //createNote();
+                if(mRowId == null|| mRowId == -1){
+                    long id = mDbHelper.createNote(title, body, curDate);
+                    Log.d("save","id : " + id);
+                    if(id > 0){
+                        mRowId = id;
+                    }else{
+                        Log.d("saveState","failed to create note");
+                    }
+                }else{
+                    if(!mDbHelper.updateNote(mRowId, title, body, curDate)){
+                        Log.e("saveState","failed to update note");
+                    }
+                }
+                setResult(RESULT_OK);
+                finish();
             }
         });
 
+        Button delBtn = findViewById(R.id.del_Btn); //--삭제 버튼
+        delBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                new AlertDialog.Builder(EditView.this)
+                        .setTitle("Alert!")
+                        .setMessage("Are you sure to delete?")
+                        .setCancelable(true)
+                        .setPositiveButton("delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(note != null){
+                                    note.close();
+                                    note = null;
+                                }
+                                if(mRowId != null){
+                                    mDbHelper.deleteNote(mRowId);
+                                }
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
 
+            }
+        });
 
     }
 }
