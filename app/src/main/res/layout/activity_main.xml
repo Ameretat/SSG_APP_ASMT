@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D3D3D3"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textViewTop"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:layout_alignParentTop="true"
+
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="#a1fff0"
+        android:paddingBottom="35dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/listView"
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/textViewTop"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:background="#D3D3D3"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTop"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/memo_row" />
+
+    <Button
+        android:id="@+id/edit_btn"
+
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/button_shape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="8"
+        android:text="+"
+        android:textColor="#FFFFFF"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <!--<Button-->
+        <!--android:id="@+id/angry_btn"-->
+
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:background="@drawable/button_shape"-->
+
+        <!--android:shadowColor="#A8A8A8"-->
+        <!--android:shadowDx="0"-->
+        <!--android:shadowDy="0"-->
+        <!--android:shadowRadius="8"-->
+        <!--android:text="+"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:textSize="50sp"-->
+        <!--tools:layout_editor_absoluteX="288dp"-->
+        <!--tools:layout_editor_absoluteY="415dp" />-->
+
+    <!--android:layout_above="@+id/btmLayout"-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/btmLayout"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:background="#c8fff6"-->
+        <!--android:gravity="center"-->
+        <!--tools:layout_editor_absoluteX="0dp"-->
+        <!--tools:layout_editor_absoluteY="118dp">-->
+
+        <!--<Button-->
+            <!--android:id="@+id/addnotebutton"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="wrap_content" />-->
+
+    <!--</LinearLayout>-->
+
+</android.support.constraint.ConstraintLayout>
